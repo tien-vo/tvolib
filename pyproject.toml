@@ -17,10 +17,10 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-matplotlib = "^3.7.2"
-numpy = "^1.25.1"
-astropy = "^5.3.1"
-scipy = "^1.11.1"
+matplotlib = "*"
+numpy = "*"
+astropy = "*"
+scipy = "*"
 
 
 [build-system]
