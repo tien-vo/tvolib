@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tvolib"
-version = "0.1.0"
+version = "0.1.1"
 description = "A personal collection of Python and IDL research tools in Space Plasma Physics."
 authors = ["Tien Vo <tien.a.vo@proton.me>"]
 readme = "README.md"
