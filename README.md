@@ -5,8 +5,7 @@ into packages. Some are more well-documented than others. Please use them at you
 
 ## Installation
 
+Ensure `micromamba` is recognized in PATH. Then just run
 ```
-conda create --name tvolib --file conda-linux-64.lock
-conda activate tvolib
-poetry install
+make install
 ```
