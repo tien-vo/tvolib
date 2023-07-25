@@ -4,10 +4,10 @@ __all__ = [
     "draw_multicolored_line",
 ]
 
+import numpy as np
 from matplotlib.collections import LineCollection
 from matplotlib.patches import FancyArrowPatch
 from matplotlib.colors import Normalize
-import numpy as np
 
 
 def draw_arrows(axis, x, y, N=None, color="k"):

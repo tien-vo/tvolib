@@ -3,8 +3,8 @@ __all__ = [
     "format_datetime_axis",
 ]
 
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.dates as mdates
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def add_colorbar(axis, where="right", pad=0.05, size="2%"):
