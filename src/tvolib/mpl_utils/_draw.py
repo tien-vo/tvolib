@@ -11,7 +11,8 @@ from matplotlib.colors import Normalize
 
 
 def draw_arrows(axis, x, y, N=None, color="k"):
-    r"""Draws arrows along a path on the axis"""
+    r"""Draws arrows along a path on the axis
+    """
     N = len(x) // 5 if N is None else N
     d = len(x) // (N + 1)
 
@@ -28,7 +29,8 @@ def draw_arrows(axis, x, y, N=None, color="k"):
 
 
 def draw_earth(axis, R=1, N=50, zorder=999):
-    r"""Draws the Earth on the axis (with shading indicating day/night)"""
+    r"""Draws the Earth on the axis (with shading indicating day/night)
+    """
     # Nightside
     theta = np.linspace(np.pi / 2, 3 * np.pi / 2, N)
     Xn = R * np.cos(theta)
@@ -50,7 +52,8 @@ def draw_earth(axis, R=1, N=50, zorder=999):
 
 def draw_multicolored_line(axis, x, y, c, cmap="jet",
                            vmin=None, vmax=None, set_lim=False, **kwargs):
-    r"""Draws a line with colors on a scale determined by c"""
+    r"""Draws a line with colors on a scale determined by c
+    """
 
     vmin = c.min() if vmin is None else vmin
     vmax = c.max() if vmax is None else vmax
