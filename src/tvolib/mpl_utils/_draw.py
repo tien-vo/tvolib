@@ -48,9 +48,8 @@ def draw_earth(axis, R=1, N=50, zorder=999):
     axis.fill(Xn, Yn, color="k")
 
 
-def draw_multicolored_line(
-    axis, x, y, c, cmap="jet", vmin=None, vmax=None, set_lim=False, **kwargs
-):
+def draw_multicolored_line(axis, x, y, c, cmap="jet",
+                           vmin=None, vmax=None, set_lim=False, **kwargs):
     r"""Draws a line with colors on a scale determined by c"""
 
     vmin = c.min() if vmin is None else vmin
