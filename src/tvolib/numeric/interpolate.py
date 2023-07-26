@@ -43,7 +43,7 @@ def interpol(y, x, xout, window=None, kind="linear"):
             yin = (
                 move_avg(y[:, i], (w,), window=window)
                 if window is not None
-                else y
+                else y[:, i]
             )
             yout[:, i] = interp1d(x, yin, **interp_kw)(xout)
     else:
