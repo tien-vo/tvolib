@@ -3,8 +3,9 @@ __all__ = ["interpol"]
 import astropy.units as u
 import numpy as np
 from scipy.interpolate import interp1d
-from .timing import sampling_period
+
 from .moving import move_avg
+from .timing import sampling_period
 
 
 def interpol(y, x, xout, window=None, kind="linear"):
@@ -14,6 +15,25 @@ def interpol(y, x, xout, window=None, kind="linear"):
     window argument can be set to apply a moving average over the
     original temporal grid. Additionally, astropy.Quantity are preserved
     from this function.
+
+    Parameters
+    ----------
+    y: array_like, shape (N, ...)
+        Signal to interpolate, first axis is implicitly time (N)
+    x: datetime64 array, shape (N,)
+        Time corresponding to the signal `y`
+    xout: datetime64 array, shape (M,)
+        Output time to interpolate on
+    window: "box", "gauss"
+        Type of window if applying a moving average on `y` before
+            interpolating is desired
+    kind: "linear", "cubic", etc
+        See scipy.interpolate.interp1d documentation.
+
+    Return
+    ------
+    yout: array_like, shape (M, ...)
+        Interpolated signal
     """
 
     if not (
