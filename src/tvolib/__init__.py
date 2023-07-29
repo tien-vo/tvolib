@@ -1,5 +1,1 @@
-from tvolib import (
-    mpl_utils,
-    numeric,
-    models,
-)
+from tvolib import models, mpl_utils, numeric
