@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tvolib"
-version = "0.3.0"
+version = "0.4.0"
 description = "A personal collection of Python and IDL research tools in Space Plasma Physics."
 authors = ["Tien Vo <tien.a.vo@proton.me>"]
 readme = "README.md"
@@ -21,6 +21,13 @@ matplotlib = "*"
 numpy = "*"
 astropy = "*"
 scipy = "*"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+isort = "*"
 
 
 [build-system]

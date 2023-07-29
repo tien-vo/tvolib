@@ -1,7 +1,3 @@
-r"""3D asymmetric magnetopause model. For references consult
-    Lin+ (2010), "A three-dimensional asymmetric magnetopause model", JGR-SP, doi:10.1029/2009JA014235
-"""
-
 __all__ = ["Lin10MagnetopauseModel"]
 
 import numpy as np
@@ -9,7 +5,13 @@ from scipy.interpolate import UnivariateSpline
 
 
 class Lin10MagnetopauseModel:
-    # Fit coefficients (see Table 9)
+    r"""
+    3D asymmetric magnetopause model. For references consult
+    Lin+ (2010), "A three-dimensional asymmetric magnetopause model",
+    JGR-Space Physics, doi:10.1029/2009JA014235
+    """
+
+    # Fit coefficients (see Table 9 in reference)
     a = np.zeros(22, dtype=np.float32)
     a[0] = 12.544
     a[1] = -0.194
@@ -36,15 +38,15 @@ class Lin10MagnetopauseModel:
 
     def __init__(self, pressure, bfield, tilt_angle):
         r"""
-        ----------
+
         Parameters
         ----------
         pressure: nPa
-            Total (dynamic and magnetic) solar wind pressure.
+            Total (dynamic and magnetic) solar wind pressure
         bfield: nT
-            z coordinate of the interplanetary magnetic field.
+            z coordinate of the interplanetary magnetic field
         tilt_angle: rad
-            Dipole tilt angle.
+            Dipole tilt angle
         """
 
         # Save
@@ -56,7 +58,10 @@ class Lin10MagnetopauseModel:
         self.construct_model()
 
     def construct_model(self):
-        r"""Calculate the coefficients in eq. (20) and r(theta, varphi) in eq. (19)"""
+        r"""
+        Calculate the coefficients in eq. (20) and r(theta, varphi)
+        in eq. (19)
+        """
         # Unpack
         a = self.a
         P = self._P
@@ -64,7 +69,11 @@ class Lin10MagnetopauseModel:
         phi = self._phi
 
         # Auxilliary coefficients
-        r0 = (a[0] * (P ** a[1]) * (1 + a[2] * (np.exp(a[3] * Bz) - 1) / (np.exp(a[4] * Bz) + 1)))
+        r0 = (
+            a[0]
+            * (P ** a[1])
+            * (1 + a[2] * (np.exp(a[3] * Bz) - 1) / (np.exp(a[4] * Bz) + 1))
+        )
         b0 = a[6] + a[7] * (np.exp(a[8] * Bz) - 1) / (np.exp(a[9] * Bz) + 1)
         b1 = a[10]
         b2 = a[11] + a[12] * phi
@@ -78,14 +87,26 @@ class Lin10MagnetopauseModel:
 
         # Auxilliary functions
         def psi_n(varphi, theta):
-            return np.arccos(np.cos(theta) * np.cos(tn) + np.sin(theta) * np.sin(tn) * np.cos(varphi - np.pi / 2))
+            return np.arccos(
+                np.cos(theta) * np.cos(tn)
+                + np.sin(theta) * np.sin(tn) * np.cos(varphi - np.pi / 2)
+            )
 
         def psi_s(varphi, theta):
-            return np.arccos(np.cos(theta) * np.cos(ts) + np.sin(theta) * np.sin(ts) * np.cos(varphi - 3 * np.pi / 2))
+            return np.arccos(
+                np.cos(theta) * np.cos(ts)
+                + np.sin(theta) * np.sin(ts) * np.cos(varphi - 3 * np.pi / 2)
+            )
 
         def f(varphi, theta):
-            return (np.cos(theta / 2) + a[5] * np.sin(theta * 2) * (1 - np.exp(-theta))) ** (
-                b0 + b1 * np.cos(varphi) + b2 * np.sin(varphi) + b3 * (np.sin(varphi) ** 2)
+            return (
+                np.cos(theta / 2)
+                + a[5] * np.sin(theta * 2) * (1 - np.exp(-theta))
+            ) ** (
+                b0
+                + b1 * np.cos(varphi)
+                + b2 * np.sin(varphi)
+                + b3 * (np.sin(varphi) ** 2)
             )
 
         # Radial function
@@ -155,7 +176,9 @@ class Lin10MagnetopauseModel:
         return UnivariateSpline(T[idx], R[idx], s=0)
 
     def add_mpause_model(self, ax, which="XY", rotation_angle=0, **kw):
-        ax.plot(*self.shape_N(which=which, rotation_angle=rotation_angle), **kw)
+        ax.plot(
+            *self.shape_N(which=which, rotation_angle=rotation_angle), **kw
+        )
 
     @property
     def pressure(self):
@@ -183,7 +206,7 @@ class Lin10MagnetopauseModel:
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+    from tvolib import mpl_utils as mu
 
     model = Lin10MagnetopauseModel(pressure=1, bfield=0, tilt_angle=0)
     X_gsm, Y_gsm = model.shape_N(which="XY")
@@ -191,12 +214,13 @@ if __name__ == "__main__":
     f = model.shape_F(which="XY", rotation_angle=np.radians(0))
     R = f(T)
 
-    fig, ax = plt.subplots(1, 1)
+    fig, ax = mu.plt.subplots(1, 1)
 
+    mu.draw_earth(ax)
     ax.plot(X_gsm, Y_gsm, "-k")
     ax.plot(R * np.cos(T), R * np.sin(T), "--r")
     ax.set_xlim(-40, 20)
     ax.set_ylim(-35, 35)
     ax.set_aspect("equal")
 
-    plt.show()
+    mu.plt.show()

@@ -1,1 +1,0 @@
-from .lin10_magnetopause_model import Lin10MagnetopauseModel

@@ -6,7 +6,13 @@ well-documented than others. Please use them at your discretion.
 
 ## Installation
 
-Ensure `micromamba` is recognized in PATH. Then just run
+The Python codes are published on PyPI. For installation run
 ```
-make install
+pip install tvolib
 ```
+
+To use the IDL code, run
+```
+source idlrc
+```
+to put `src/idl` into `IDL_PATH`.

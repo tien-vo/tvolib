@@ -25,6 +25,11 @@ $(INSTALL_STAMP): pyproject.toml $(POETRY_LOCK) $(CONDA_LOCK)
 	@touch $(INSTALL_STAMP)
 	@echo "Done installation!"
 
+.PHONY: format
+format:
+	poetry run isort src/
+	poetry run black -l 79 src/
+
 .PHONY: clean
 clean:
 	find . -type d -name "__pycache__" | xargs rm -rf {};
