@@ -1,12 +1,13 @@
 __all__ = ["setup"]
 
-import tempfile
 import atexit
-import shutil
 import os
-import matplotlib.pyplot as plt
-import matplotlib as mpl
+import shutil
+import tempfile
 from importlib.resources import files
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 
 def _checkdep_usetex(s):
