@@ -1,18 +1,35 @@
 __all__ = ["move_avg", "move_rms", "move_std"]
 
-import numpy as np
 from functools import reduce
+
+import numpy as np
 from astropy.convolution import (
+    Box1DKernel,
+    CustomKernel,
     Gaussian1DKernel,
     Gaussian2DKernel,
-    CustomKernel,
-    Box1DKernel,
     convolve,
 )
 
 
 def move_avg(x, w, window="box"):
-    r"""Calculate the moving average of a signal."""
+    r"""
+    Calculate the moving average of a signal
+
+    Parameters
+    ----------
+    x: array_like, shape (N, ...)
+        Input signal. Currently only works up to 2 dimensions
+    w: tuple
+        Shape of averaging window
+    window: "box", "gauss"
+        Type of window to apply average on
+
+    Return
+    ------
+    xout: array_like
+        Processed signal
+    """
 
     if not isinstance(w, (tuple, list)):
         raise NotImplementedError("w must be a tuple or list.")
@@ -40,12 +57,44 @@ def move_avg(x, w, window="box"):
 
 
 def move_rms(x, w, window="box"):
-    r"""Calculate the moving root-mean-square of a signal."""
+    r"""
+    Calculate the moving root-mean-square of a signal
+
+    Parameters
+    ----------
+    x: array_like, shape (N, ...)
+        Input signal. Currently only works up to 2 dimensions
+    w: tuple
+        Shape of averaging window
+    window: "box", "gauss"
+        Type of window to apply average on
+
+    Return
+    ------
+    xout: array_like
+        Processed signal
+    """
     return np.sqrt(move_avg(x**2, w, window=window))
 
 
 def move_std(x, w, window="box"):
-    r"""Calculate the moving standard deviation of a signal."""
+    r"""
+    Calculate the moving standard deviation of a signal
+
+    Parameters
+    ----------
+    x: array_like, shape (N, ...)
+        Input signal. Currently only works up to 2 dimensions
+    w: tuple
+        Shape of averaging window
+    window: "box", "gauss"
+        Type of window to apply average on
+
+    Return
+    ------
+    xout: array_like
+        Processed signal
+    """
     return np.sqrt(
         move_avg(x**2, w, window=window) - move_avg(x, w, window=window) ** 2
     )
