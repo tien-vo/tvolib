@@ -17,3 +17,9 @@ def format_datetime_axis(axis):
     locator = mdates.AutoDateLocator()
     formatter = mdates.ConciseDateFormatter(locator)
     axis.xaxis.set_major_formatter(formatter)
+
+
+def add_text(axis, x, y, text, **kwargs):
+    transform = axis.transAxes
+    box_format = dict(facecolor="wheat", alpha=0.9)
+    axis.text(x, y, text, transform=transform, bbox=box_format, **kwargs)
