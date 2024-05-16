@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "tvolib"
 version = "0.5.1"
-description = "A personal collection of Python and IDL research tools in Space Plasma Physics."
-authors = ["Tien Vo <tien.a.vo@proton.me>"]
+description = "A personal collection of Python and IDL tools for research in Space Plasma Physics"
+authors = ["Tien Vo <tvo.work@proton.me>"]
+license = "GPL-3.0-only"
 readme = "README.md"
-license = "GPL-3.0-or-later"
 packages = [
     { include = "tvolib", from = "src" }
 ]
@@ -16,19 +16,14 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
-matplotlib = "*"
-numpy = "*"
-astropy = "*"
-scipy = "*"
-
-[tool.poetry.group.dev]
-optional = true
+python = "^3.12"
+astropy = "^6.1.0"
+scipy = "^1.13.0"
+matplotlib = "^3.9.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "*"
-isort = "*"
-
+black = "^24.4.2"
+isort = "^5.13.2"
 
 [build-system]
 requires = ["poetry-core"]
