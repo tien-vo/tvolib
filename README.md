@@ -13,6 +13,6 @@ pip install tvolib
 
 To use the IDL code, run
 ```
-source idlrc
+source bin/init_idl.sh
 ```
 to put `src/idl` into `IDL_PATH`.
