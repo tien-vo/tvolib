@@ -6,7 +6,7 @@ from os import environ
 
 
 def _setup_logger():
-    r"""Set logging format for stdout"""
+    r"""Configure logging format for stdout"""
 
     logging.basicConfig(
         format=r"%(asctime)s [%(levelname)s]: %(message)s",
