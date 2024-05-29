@@ -1,1 +1,3 @@
-from tvolib import models, mpl_utils, numeric
+from tvolib.logging import setup_logger
+
+setup_logger()
