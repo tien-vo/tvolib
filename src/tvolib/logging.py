@@ -6,6 +6,8 @@ from os import environ
 
 
 def _setup_logger():
+    r"""Set logging format for stdout"""
+
     logging.basicConfig(
         format=r"%(asctime)s [%(levelname)s]: %(message)s",
         level=logging.INFO if environ.get("DEBUG") is None else logging.DEBUG,
