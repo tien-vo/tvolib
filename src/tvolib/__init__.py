@@ -1,3 +1,3 @@
-from tvolib.logging import setup_logger
+from tvolib.logging import _setup_logger
 
-setup_logger()
+_setup_logger()
