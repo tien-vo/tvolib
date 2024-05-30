@@ -4,68 +4,159 @@ __all__ = [
     "draw_multicolored_line",
 ]
 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.collections import LineCollection
-from matplotlib.colors import Normalize
-from matplotlib.patches import FancyArrowPatch
+import numpy.typing as npt
 
 
-def draw_arrows(axis, x, y, N=None, color="k"):
-    r"""Draws arrows along a path on the axis"""
-    N = len(x) // 5 if N is None else N
-    d = len(x) // (N + 1)
+def draw_arrows(
+    ax: plt.Axes,
+    x: npt.ArrayLike,
+    y: npt.ArrayLike,
+    number_of_arrows: int | None = None,
+    color: str = "k",
+) -> None:
+    r"""
+    Draws arrows along a path on a given `Axes` instance
 
-    idx = np.arange(d, len(x), d)
-    for i in idx:
-        ar = FancyArrowPatch(
+    Parameters
+    ----------
+    ax: `matplotlib.axes.Axes`
+        The `Axes` instance to draw on.
+    x: array_like, shape (n,)
+        1D array containing the path's x-coordinates.
+    y: array_like, shape (n,)
+        1D array containing the path's y-coordinates.
+    number_of_arrows: int
+        Number of arrows to draw.
+    color: str
+        Arrow color
+    """
+
+    # Pre-process inputs and sanity checks
+    x = np.array(x)
+    y = np.array(y)
+    assert x.ndim == y.ndim == 1, "Input `x` and `y` coordinates must be 1D"
+
+    # Calculate arrow spacing along the path and where to draw them
+    data_size = len(x)
+    number_of_arrows = (
+        data_size // 5 if number_of_arrows is None else number_of_arrows
+    )
+    spacing = data_size // (number_of_arrows + 1)
+    draw_idx = np.arange(spacing, data_size, spacing)
+
+    # Draw arrows on patches
+    for i in draw_idx:
+        arrow_patch = mpl.patches.FancyArrowPatch(
             (x[i - 1], y[i - 1]),
             (x[i], y[i]),
             arrowstyle="->",
             mutation_scale=20,
             color=color,
         )
-        axis.add_patch(ar)
+        ax.add_patch(arrow_patch)
 
 
-def draw_earth(axis, R=1, N=50, zorder=999):
-    r"""Draws the Earth on the axis (with shading indicating day/night)"""
+def draw_earth(
+    ax: plt.Axes,
+    radius: float = 1,
+    number_of_points: int = 50,
+    zorder: int = 999,
+) -> None:
+    r"""
+    Draws the Earth on a given `Axes` instance with shading indicating
+    day/night. Dayside is x>0.
+
+    Parameters
+    ----------
+    ax: `matplotlib.axes.Axes`
+        The `Axes` instance to draw on.
+    radius: float
+        The radius of the Earth on the `Axes`.
+    number_of_points: int
+        The larger the number of points, the smoother the drawn shape.
+    zorder: int
+        Order on the `Axes`.
+    """
+
     # Nightside
-    theta = np.linspace(np.pi / 2, 3 * np.pi / 2, N)
-    Xn = R * np.cos(theta)
-    Yn = R * np.sin(theta)
+    theta = np.linspace(np.pi / 2, 3 * np.pi / 2, number_of_points)
+    Xn = radius * np.cos(theta)
+    Yn = radius * np.sin(theta)
     Xn = np.append(Xn, Xn[0])
     Yn = np.append(Yn, Yn[0])
+
     # Dayside
-    theta = np.linspace(-np.pi / 2, np.pi / 2, N)
-    Xd = R * np.cos(theta)
-    Yd = R * np.sin(theta)
+    theta = np.linspace(-np.pi / 2, np.pi / 2, number_of_points)
+    Xd = radius * np.cos(theta)
+    Yd = radius * np.sin(theta)
     Xd = np.append(Xd, Xd[0])
     Yd = np.append(Yd, Yd[0])
+
     # Plot
-    axis.plot(Xd, Yd, "-k", zorder=zorder)
-    axis.plot(Xn, Yn, "-k", zorder=zorder)
-    axis.fill(Xd, Yd, color="w")
-    axis.fill(Xn, Yn, color="k")
+    ax.plot(Xd, Yd, "-k", zorder=zorder)
+    ax.plot(Xn, Yn, "-k", zorder=zorder)
+    ax.fill(Xd, Yd, color="w")
+    ax.fill(Xn, Yn, color="k")
 
 
 def draw_multicolored_line(
-    axis, x, y, c, cmap="jet", vmin=None, vmax=None, set_lim=False, **kwargs
-):
-    r"""Draws a line with colors on a scale determined by c"""
+    ax: plt.Axes,
+    x: npt.ArrayLike,
+    y: npt.ArrayLike,
+    c: npt.ArrayLike,
+    cmap: str = "cet_rainbow",
+    vmin: float | None = None,
+    vmax: float | None = None,
+    **kwargs,
+) -> mpl.collections.Collection:
+    r"""
+    Draw a colored line on a given `Axes` instance
 
+    Parameters
+    ----------
+    ax: `matplotlib.axes.Axes`
+        The `Axes` instance to draw on.
+    x: array_like, shape (n,)
+        1D array containing the x-coordinates.
+    y: array_like, shape (n,)
+        1D array containing the y-coordinates.
+    c: array_like, shape (n,)
+        1D array containing the colored data.
+    cmap: str
+    """
+
+    # Pre-process inputs and sanity checks
+    x = np.array(x)
+    y = np.array(y)
+    c = np.array(c)
     vmin = c.min() if vmin is None else vmin
     vmax = c.max() if vmax is None else vmax
+    assert (
+        x.ndim == y.ndim == c.ndim == 1
+    ), "Input `x` and `y` coordinates and colored data `c` must be 1D"
 
+    # Create points and segments from coordinates
     points = np.array([x, y]).T.reshape(-1, 1, 2)
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
-    norm = Normalize(vmin, vmax)
-    lc = LineCollection(segments, cmap=cmap, norm=norm, **kwargs)
+
+    # Create line segments and color them based on `c`
+    lc = mpl.collections.LineCollection(
+        segments,
+        cmap=cmap,
+        norm=mpl.colors.Normalize(vmin, vmax),
+        **kwargs,
+    )
     lc.set_array(c)
-    line = axis.add_collection(lc)
-    if set_lim:
+    line = ax.add_collection(lc)
+
+    # Automatically set limits to axis
+    if len(ax.get_lines()) == 1:
         Lx = x.max() - x.min()
         Ly = y.max() - y.min()
-        axis.set_xlim(x.min() - 0.1 * Lx, x.max() + 0.1 * Lx)
-        axis.set_ylim(y.min() - 0.1 * Ly, y.max() + 0.1 * Ly)
+        ax.set_xlim(x.min() - 0.1 * Lx, x.max() + 0.1 * Lx)
+        ax.set_ylim(y.min() - 0.1 * Ly, y.max() + 0.1 * Ly)
 
     return line

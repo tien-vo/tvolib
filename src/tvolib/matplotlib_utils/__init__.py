@@ -1,3 +1,4 @@
+import colorcet
 import matplotlib as mpl
 
 from ._draw import draw_arrows, draw_earth, draw_multicolored_line
