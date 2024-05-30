@@ -126,6 +126,12 @@ def draw_multicolored_line(
     c: array_like, shape (n,)
         1D array containing the colored data.
     cmap: str
+
+    Return
+    ------
+    line: `mpl.collections.LineCollection`
+        The line collection instance created from drawing all the colored
+        segments.
     """
 
     # Pre-process inputs and sanity checks
