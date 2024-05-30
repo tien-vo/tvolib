@@ -68,7 +68,7 @@ def add_panel_label(
     ax.text(x, y, text, transform=ax.transAxes, bbox=box_format, **kwargs)
 
 
-def format_datetime_labels(ax: plt.Axes):
+def format_datetime_labels(ax: plt.Axes) -> None:
     r"""
     Format the labels for plots with `numpy.datetime64` abscissa.
 
