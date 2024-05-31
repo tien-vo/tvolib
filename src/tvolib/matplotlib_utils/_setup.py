@@ -3,6 +3,7 @@ __all__ = ["_setup_matplotlib"]
 import atexit
 import os
 import shutil
+import logging
 import tempfile
 from importlib.resources import files
 
@@ -26,6 +27,7 @@ def _setup_matplotlib(use_tex=False, cache_tex=False):
         Recommended for multiprocessing
     """
 
+    logging.info("Using tvolib stylesheet")
     plt.style.use(_stylesheet)
     plt.rc("text", usetex=use_tex and _latex_binary is not None)
 
