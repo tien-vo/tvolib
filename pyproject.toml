@@ -20,7 +20,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 numpy = "2.0.0"
 scipy = "^1.13.0"
 astropy = "^6.1.0"
